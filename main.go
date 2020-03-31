@@ -2,31 +2,31 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/phamminhtoan/gallery/views"
 )
 
 var (
-	homeTemplate    *template.Template
-	contactTemplate *template.Template
+	homeView    *views.View
+	contactView *views.View
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeTemplate.Execute(w, nil); err != nil {
+	err := homeView.Template.Execute(w, nil)
+	if err != nil {
 		panic(err)
 	}
-	// fmt.Fprint(w, "<h1>Welcome to my awesome site!</h1>")
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	if err := contactTemplate.Execute(w, nil); err != nil {
+	err := contactView.Template.Execute(w, nil)
+	if err != nil {
 		panic(err)
 	}
-	fmt.Fprint(w, "To get in touch, please send an mail to <a href=\"mailto:minhtoan.jc@gmail.com\">minhtoan.jc@gmail.com</a>.")
 }
 
 func faq(w http.ResponseWriter, r *http.Request) {
@@ -41,22 +41,9 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	var err error
-	homeTemplate, err = template.ParseFiles(
-		"views/home.html",
-		"views/layouts/footer.html",
-	)
-	if err != nil {
-		panic(err)
-	}
 
-	contactTemplate, err = template.ParseFiles(
-		"views/contact.html",
-		"views/layouts/footer.html",
-	)
-	if err != nil {
-		panic(err)
-	}
+	homeView = views.NewView("views/home.html")
+	contactView = views.NewView("views/contact.html")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
