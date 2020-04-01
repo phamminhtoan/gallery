@@ -42,8 +42,8 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	homeView = views.NewView("views/home.html")
-	contactView = views.NewView("views/contact.html")
+	homeView = views.NewView("views/home.gohtml")
+	contactView = views.NewView("views/contact.gohtml")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
